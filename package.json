@@ -1,0 +1,25 @@
+{
+  "name": "concepts-of-mathematics-coaching",
+  "version": "1.0.0",
+  "description": "Full-stack MERN application for Concepts of Mathematics Coaching, Hazaribagh.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install"
+  },
+  "keywords": [
+    "mern",
+    "mathematics",
+    "coaching",
+    "education",
+    "hazaribagh"
+  ],
+  "author": "Arya Swaroop",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
