@@ -1,0 +1,15 @@
+/*
+|--------------------------------------------------------------------------
+| Additional Responsive Rules
+|--------------------------------------------------------------------------
+|
+| Tailwind CSS handles the primary responsive system.
+| Keep only exceptional responsive rules here.
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 640px) {
+    html {
+        font-size: 15px;
+    }
+}

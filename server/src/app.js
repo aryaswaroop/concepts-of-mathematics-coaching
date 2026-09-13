@@ -1,21 +1,30 @@
 import express from "express";
 import cors from "cors";
-import helmet from "helmet";
-import morgan from "morgan";
+
+import courseRoutes from "./routes/courseRoutes.js";
+import errorMiddleware from "./middlewares/errorMiddleware.js";
+import batchRoutes from "./routes/batchRoutes.js";
 
 const app = express();
 
-app.use(helmet());
-app.use(cors());
+app.use(
+    cors({
+        origin: process.env.CLIENT_URL || "http://localhost:5173",
+    })
+);
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(morgan("dev"));
 
 app.get("/api/health", (req, res) => {
     res.status(200).json({
         success: true,
-        message: "Concepts of Mathematics Coaching API is running",
+        message: "Concepts of Mathematics API is running",
     });
 });
+
+app.use("/api/courses", courseRoutes);
+app.use("/api/batches", batchRoutes);
+
+app.use(errorMiddleware);
 
 export default app;
