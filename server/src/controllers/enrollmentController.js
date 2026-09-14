@@ -1,4 +1,8 @@
-import { createEnrollment } from "../services/enrollmentService.js";
+import {
+    createEnrollment,
+    getAllEnrollments,
+    getEnrollmentById,
+} from "../services/enrollmentService.js";
 
 export const createNewEnrollment = async (req, res, next) => {
     try {
@@ -29,6 +33,48 @@ export const createNewEnrollment = async (req, res, next) => {
         res.status(201).json({
             success: true,
             message: "Student enrolled successfully",
+            data: enrollment,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const fetchAllEnrollments = async (req, res, next) => {
+    try {
+        const enrollments = await getAllEnrollments({
+            studentId: req.query.studentId,
+            courseId: req.query.courseId,
+            batchId: req.query.batchId,
+            session: req.query.session,
+            status: req.query.status,
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Enrollments fetched successfully",
+            data: enrollments,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const fetchEnrollmentById = async (req, res, next) => {
+    try {
+        const enrollment = await getEnrollmentById(req.params.id);
+
+        if (!enrollment) {
+            return res.status(404).json({
+                success: false,
+                message: "Enrollment not found",
+                data: null,
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Enrollment fetched successfully",
             data: enrollment,
         });
     } catch (error) {

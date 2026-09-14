@@ -146,9 +146,88 @@ export const createEnrollment = async ({
         notes,
     });
 
+    // --------------------------------
+    // 11. Update Batch Status
+    // --------------------------------
+
+    const updatedStrength = currentStrength + 1;
+
+    if (updatedStrength >= batch.capacity) {
+        await Batch.findByIdAndUpdate(batchId, {
+            status: "FULL",
+        });
+    }
+
+    // --------------------------------
+    // 12. Return Enrollment
+    // --------------------------------
+
     return await Enrollment.findById(enrollment._id)
-        .populate("studentId", "name admissionNumber class phone email")
-        .populate("courseId", "name class subject originalFee")
+        .populate(
+            "studentId",
+            "name admissionNumber class phone email"
+        )
+        .populate(
+            "courseId",
+            "name class subject originalFee"
+        )
+        .populate(
+            "batchId",
+            "name session shift startTime endTime capacity status"
+        )
+        .lean();
+};
+
+export const getAllEnrollments = async (filters = {}) => {
+    const query = {};
+
+    if (filters.studentId) {
+        query.studentId = filters.studentId;
+    }
+
+    if (filters.courseId) {
+        query.courseId = filters.courseId;
+    }
+
+    if (filters.batchId) {
+        query.batchId = filters.batchId;
+    }
+
+    if (filters.session) {
+        query.session = filters.session;
+    }
+
+    if (filters.status) {
+        query.status = filters.status.toUpperCase();
+    }
+
+    return await Enrollment.find(query)
+        .populate(
+            "studentId",
+            "name admissionNumber class phone email"
+        )
+        .populate(
+            "courseId",
+            "name class subject originalFee"
+        )
+        .populate(
+            "batchId",
+            "name session shift startTime endTime capacity status"
+        )
+        .sort({ createdAt: -1 })
+        .lean();
+};
+
+export const getEnrollmentById = async (enrollmentId) => {
+    return await Enrollment.findById(enrollmentId)
+        .populate(
+            "studentId",
+            "name admissionNumber class phone email"
+        )
+        .populate(
+            "courseId",
+            "name class subject originalFee"
+        )
         .populate(
             "batchId",
             "name session shift startTime endTime capacity status"
