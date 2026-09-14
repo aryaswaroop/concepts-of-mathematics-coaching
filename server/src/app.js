@@ -4,6 +4,8 @@ import cors from "cors";
 import courseRoutes from "./routes/courseRoutes.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 import batchRoutes from "./routes/batchRoutes.js";
+import enrollmentRoutes from "./routes/enrollmentRoutes.js";
+import studentRoutes from "./routes/studentRoutes.js";
 
 const app = express();
 
@@ -24,6 +26,9 @@ app.get("/api/health", (req, res) => {
 
 app.use("/api/courses", courseRoutes);
 app.use("/api/batches", batchRoutes);
+app.use("/api/enrollments", enrollmentRoutes);
+app.use("/api/students", studentRoutes);
+
 
 app.use(errorMiddleware);
 
