@@ -1,52 +1,50 @@
-import { useEffect } from "react";
-
-/**
- * SEO Component
- *
- * Updates:
- * - Document title
- * - Meta description
- * - Robots
- * - Canonical URL
- */
+import { Helmet } from "react-helmet-async";
 
 const SEO = ({
-    title,
-    description,
-    canonical = window.location.href,
+    title = "Concepts of Mathematics | Class 11 & 12 Mathematics Coaching",
+    description = "Concepts of Mathematics provides focused Mathematics coaching for Class 11 and Class 12 students with regular tests, personal guidance and board-oriented preparation.",
+    keywords = "Concepts of Mathematics, Mathematics coaching, Class 11 Mathematics, Class 12 Mathematics, Maths coaching",
 }) => {
-    useEffect(() => {
-        document.title = title;
+    return (
+        <Helmet>
+            <title>{title}</title>
 
-        const updateMeta = (name, content) => {
-            let meta = document.querySelector(`meta[name="${name}"]`);
+            <meta
+                name="description"
+                content={description}
+            />
 
-            if (!meta) {
-                meta = document.createElement("meta");
-                meta.name = name;
-                document.head.appendChild(meta);
-            }
+            <meta
+                name="keywords"
+                content={keywords}
+            />
 
-            meta.content = content;
-        };
+            <meta
+                name="robots"
+                content="index, follow"
+            />
 
-        updateMeta("description", description);
-        updateMeta("robots", "index, follow");
+            <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0"
+            />
 
-        let canonicalLink = document.querySelector(
-            'link[rel="canonical"]'
-        );
+            <meta
+                property="og:title"
+                content={title}
+            />
 
-        if (!canonicalLink) {
-            canonicalLink = document.createElement("link");
-            canonicalLink.rel = "canonical";
-            document.head.appendChild(canonicalLink);
-        }
+            <meta
+                property="og:description"
+                content={description}
+            />
 
-        canonicalLink.href = canonical;
-    }, [title, description, canonical]);
-
-    return null;
+            <meta
+                property="og:type"
+                content="website"
+            />
+        </Helmet>
+    );
 };
 
 export default SEO;

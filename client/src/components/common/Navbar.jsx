@@ -1,106 +1,199 @@
-import React, { useState } from "react";
-import Button from "./Button";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+    ArrowUpRight,
+    Menu,
+    X,
+} from "lucide-react";
+import {
+    Link,
+    NavLink,
+} from "react-router-dom";
 
-/**
- * Main website navigation.
- *
- * Mobile:
- * - Hamburger menu
- *
- * Desktop:
- * - Full navigation
- */
+const navigation = [
+    { label: "Home", path: "/" },
+    { label: "About", path: "/about" },
+    { label: "Courses", path: "/courses" },
+    { label: "Batches", path: "/batches" },
+    { label: "Tests & Results", path: "/tests-results" },
+    { label: "Admission & Fees", path: "/admission-fees" },
+    { label: "Contact", path: "/contact" },
+];
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const navigation = [
-        { name: "Home", href: "/" },
-        { name: "About", href: "/about" },
-        { name: "Courses", href: "/courses" },
-        { name: "Batches", href: "/batches" },
-        { name: "Tests & Results", href: "/tests-results" },
-        { name: "Admission & Fees", href: "/admission-fees" },
-        { name: "Contact", href: "/contact" },
-    ];
+    const closeMenu = () => {
+        setIsOpen(false);
+    };
 
     return (
-        <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
-            <nav
-                className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8"
-                aria-label="Main Navigation"
-            >
-                {/* Text based logo */}
-                <a
-                    href="/"
-                    className="group flex flex-col leading-none"
-                    aria-label="Concepts of Mathematics Home"
+        <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur-xl">
+            <nav className="mx-auto flex h-[70px] max-w-[1280px] items-center justify-between px-4 sm:px-6 lg:px-7">
+
+                {/* =========================
+                    Brand / Text Logo
+                ========================== */}
+                <Link
+                    to="/"
+                    onClick={closeMenu}
+                    aria-label="Concepts of Mathematics home"
+                    className="group flex shrink-0 items-center"
                 >
-                    <span className="font-serif text-xl font-bold tracking-wide text-[#14213D] sm:text-2xl">
-                        Concepts of Mathematics
+                    <span className="mr-3 flex h-9 w-9 items-center justify-center rounded-lg border border-blue-100 bg-blue-50 text-[11px] font-extrabold tracking-[-0.06em] text-blue-700 transition-all duration-200 group-hover:border-blue-200 group-hover:bg-blue-100">
+                        CM
                     </span>
 
-                    <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.25em] text-[#B58B3C] sm:text-[10px]">
-                        Mathematics Coaching
+                    <span className="whitespace-nowrap text-[20px] font-extrabold leading-none tracking-[-0.04em] text-slate-950 sm:text-[21px]">
+                        Concepts
+                        <span className="ml-1 font-semibold text-slate-500">
+                            of Mathematics
+                        </span>
                     </span>
-                </a>
+                </Link>
 
-                {/* Desktop Navigation */}
-                <div className="hidden items-center gap-6 lg:flex">
-                    {navigation.map((item) => (
-                        <a
-                            key={item.name}
-                            href={item.href}
-                            className="text-sm font-medium text-slate-700 transition-colors duration-200 hover:text-[#B58B3C]"
-                        >
-                            {item.name}
-                        </a>
-                    ))}
+                {/* =========================
+                    Desktop Navigation
+                ========================== */}
+                <div className="hidden items-center lg:flex">
+                    <div className="flex items-center gap-0.5 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-1">
+                        {navigation.map((item) => (
+                            <NavLink
+                                to={item.path}
+                                onClick={closeMenu}
+                                className={({ isActive }) =>
+                                    `group relative whitespace-nowrap px-3 py-2 text-[15px] font-semibold transition-colors duration-300 ${isActive
+                                        ? "text-blue-600"
+                                        : "text-slate-600 hover:text-blue-600"
+                                    }`
+                                }
+                            >
+                                {({ isActive }) => (
+                                    <>
+                                        <span className="relative z-10">
+                                            {item.label}
+                                        </span>
 
-                    <Button href="/contact">
-                        Enquire Now
-                    </Button>
+                                        {/* Hover background */}
+                                        <span
+                                            className={`absolute inset-0 -z-0 rounded-lg bg-blue-50 transition-all duration-300 ${isActive
+                                                    ? "scale-100 opacity-100"
+                                                    : "scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100"
+                                                }`}
+                                        />
+
+                                        {/* Animated underline */}
+                                        <span
+                                            className={`absolute bottom-0 left-1/2 h-[2px] -translate-x-1/2 rounded-full bg-blue-600 transition-all duration-300 ${isActive
+                                                    ? "w-5"
+                                                    : "w-0 group-hover:w-5"
+                                                }`}
+                                        />
+                                    </>
+                                )}
+                            </NavLink>
+                        ))}
+                    </div>
                 </div>
 
-                {/* Mobile Menu Button */}
+                {/* =========================
+                    Desktop CTA
+                ========================== */}
+                <Link
+                    to="/contact"
+                    className="group hidden items-center gap-2 rounded-full border border-transparent bg-blue-600 px-4 py-2.5 text-sm font-medium leading-5 text-white shadow-sm transition-all duration-200 hover:bg-blue-700 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-200 lg:inline-flex"
+                >
+                    <span>Enquire Now</span>
+
+                    <ArrowUpRight
+                        size={16}
+                        strokeWidth={2.2}
+                        className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                </Link>
+
+                {/* =========================
+                    Mobile Menu Button
+                ========================== */}
                 <button
                     type="button"
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-[#14213D] lg:hidden"
-                    aria-label={isOpen ? "Close menu" : "Open menu"}
+                    onClick={() => setIsOpen((value) => !value)}
+                    aria-label={
+                        isOpen
+                            ? "Close navigation menu"
+                            : "Open navigation menu"
+                    }
                     aria-expanded={isOpen}
+                    className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-800 transition-colors hover:bg-slate-50 lg:hidden"
                 >
-                    {isOpen ? "Close" : "Menu"}
+                    {isOpen ? (
+                        <X size={18} strokeWidth={2} />
+                    ) : (
+                        <Menu size={18} strokeWidth={2} />
+                    )}
                 </button>
             </nav>
 
-            {/* Mobile Navigation */}
-            {isOpen && (
-                <div className="border-t border-slate-200 bg-white lg:hidden">
-                    <div className="mx-auto flex max-w-7xl flex-col px-5 py-4">
-                        {navigation.map((item) => (
-                            <a
-                                key={item.name}
-                                href={item.href}
-                                onClick={() => setIsOpen(false)}
-                                className="border-b border-slate-100 py-3 text-sm font-medium text-slate-700 hover:text-[#B58B3C]"
-                            >
-                                {item.name}
-                            </a>
-                        ))}
+            {/* =========================
+                Mobile Navigation
+            ========================== */}
+            <AnimatePresence initial={false}>
+                {isOpen && (
+                    <motion.div
+                        initial={{
+                            height: 0,
+                            opacity: 0,
+                        }}
+                        animate={{
+                            height: "auto",
+                            opacity: 1,
+                        }}
+                        exit={{
+                            height: 0,
+                            opacity: 0,
+                        }}
+                        transition={{
+                            duration: 0.22,
+                            ease: "easeOut",
+                        }}
+                        className="overflow-hidden border-t border-slate-100 bg-white lg:hidden"
+                    >
+                        <div className="mx-auto max-w-[1280px] px-4 py-3 sm:px-6">
 
-                        <a
-                            href="/contact"
-                            onClick={() => setIsOpen(false)}
-                            className="mt-4 text-center"
-                        >
-                            <Button className="w-full">
+                            <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-1.5">
+                                {navigation.map((item) => (
+                                    <NavLink
+                                        key={item.path}
+                                        to={item.path}
+                                        onClick={closeMenu}
+                                        className={({ isActive }) =>
+                                            `block rounded-xl px-4 py-3 text-[14px] font-semibold transition-colors ${isActive
+                                                ? "bg-white text-blue-600 shadow-sm ring-1 ring-slate-200/70"
+                                                : "text-slate-600 hover:bg-white hover:text-slate-950"
+                                            }`
+                                        }
+                                    >
+                                        {item.label}
+                                    </NavLink>
+                                ))}
+                            </div>
+
+                            {/* Mobile CTA */}
+                            <Link
+                                to="/contact"
+                                onClick={closeMenu}
+                                className="mt-3 flex items-center justify-center gap-2 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-medium leading-5 text-white transition-colors hover:bg-blue-700"
+                            >
                                 Enquire Now
-                            </Button>
-                        </a>
-                    </div>
-                </div>
-            )}
+                                <ArrowUpRight
+                                    size={16}
+                                    strokeWidth={2.2}
+                                />
+                            </Link>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </header>
     );
 };

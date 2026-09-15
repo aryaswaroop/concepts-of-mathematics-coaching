@@ -1,12 +1,3 @@
-import React from "react";
-
-/**
- * Reusable section heading.
- *
- * Keeps heading structure consistent
- * throughout the website.
- */
-
 const SectionTitle = ({
     eyebrow,
     title,
@@ -15,23 +6,23 @@ const SectionTitle = ({
 }) => {
     const alignment =
         align === "left"
-            ? "text-left items-start"
-            : "text-center items-center";
+            ? "items-start text-left"
+            : "items-center text-center";
 
     return (
-        <div className={`mx-auto flex max-w-3xl flex-col ${alignment}`}>
+        <div className={`mx-auto flex max-w-2xl flex-col ${alignment}`}>
             {eyebrow && (
-                <span className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#B58B3C]">
+                <span className="text-xs font-bold uppercase tracking-[0.25em] text-blue-600">
                     {eyebrow}
                 </span>
             )}
 
-            <h2 className="font-serif text-3xl font-bold leading-tight text-[#14213D] sm:text-4xl lg:text-5xl">
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
                 {title}
             </h2>
 
             {description && (
-                <p className="mt-5 text-base leading-7 text-slate-600 sm:text-lg">
+                <p className="mt-4 text-base leading-7 text-slate-600 sm:text-lg">
                     {description}
                 </p>
             )}

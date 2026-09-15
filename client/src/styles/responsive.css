@@ -1,15 +1,21 @@
-/*
-|--------------------------------------------------------------------------
-| Additional Responsive Rules
-|--------------------------------------------------------------------------
-|
-| Tailwind CSS handles the primary responsive system.
-| Keep only exceptional responsive rules here.
-|--------------------------------------------------------------------------
-*/
+/* --------------------------------
+   Responsive utility adjustments
+--------------------------------- */
+
+@media (max-width: 1024px) {
+    :root {
+        --container-width: 960px;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --container-width: 100%;
+    }
+}
 
 @media (max-width: 640px) {
     html {
-        font-size: 15px;
+        scroll-behavior: auto;
     }
 }

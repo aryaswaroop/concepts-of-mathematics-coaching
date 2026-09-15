@@ -1,49 +1,32 @@
-import React from "react";
-
-/**
- * Reusable Button Component
- *
- * Supports:
- * - Internal navigation
- * - External links
- * - Primary / secondary variants
- * - Responsive design
- */
+import { Link } from "react-router-dom";
 
 const Button = ({
     children,
-    href,
-    variant = "primary",
-    className = "",
+    to,
     type = "button",
+    variant = "primary",
     onClick,
+    className = "",
 }) => {
-    const baseStyles =
-        "inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-semibold tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2";
+    const baseClasses =
+        "inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2";
 
     const variants = {
         primary:
-            "bg-[#14213D] text-white hover:bg-[#0d172b] focus:ring-[#14213D]",
-
+            "bg-blue-600 text-white shadow-sm hover:bg-blue-700 hover:shadow-md",
         secondary:
-            "border border-[#14213D] bg-transparent text-[#14213D] hover:bg-[#14213D] hover:text-white focus:ring-[#14213D]",
-
-        light:
-            "border border-white/40 bg-white text-[#14213D] hover:bg-transparent hover:text-white focus:ring-white",
+            "border border-slate-300 bg-white text-slate-800 hover:border-slate-400 hover:bg-slate-50",
+        dark:
+            "bg-slate-900 text-white hover:bg-slate-800",
     };
 
-    const classes = `${baseStyles} ${variants[variant]} ${className}`;
+    const classes = `${baseClasses} ${variants[variant]} ${className}`;
 
-    // Use anchor when href is provided
-    if (href) {
+    if (to) {
         return (
-            <a
-                href={href}
-                className={classes}
-                rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-            >
+            <Link to={to} className={classes}>
                 {children}
-            </a>
+            </Link>
         );
     }
 

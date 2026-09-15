@@ -1,0 +1,100 @@
+import { motion } from "framer-motion";
+import {
+    Gift,
+    Medal,
+    Sparkles,
+    Trophy,
+} from "lucide-react";
+import MathPattern from "../common/MathPattern";
+
+const rewards = [
+    {
+        icon: Trophy,
+        title: "Strong Performance",
+        description:
+            "Good test performance can be recognised through the coaching system.",
+    },
+    {
+        icon: Medal,
+        title: "Consistent Effort",
+        description:
+            "Regular improvement and consistent participation can also be encouraged.",
+    },
+    {
+        icon: Gift,
+        title: "Gifts & Recognition",
+        description:
+            "Selected weekly or monthly performers may receive gifts or recognition.",
+    },
+];
+
+const RewardsRecognition = () => {
+    return (
+        <section className="relative overflow-hidden bg-white py-16 sm:py-20">
+            <MathPattern variant="grid" />
+
+            <div className="relative z-10 mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-7">
+                <div className="mx-auto max-w-2xl text-center">
+                    <p className="text-sm font-bold uppercase tracking-[0.16em] text-blue-600">
+                        Recognition
+                    </p>
+
+                    <h2 className="mt-2 text-3xl font-extrabold tracking-[-0.045em] text-slate-950 sm:text-4xl">
+                        Good work deserves to be noticed.
+                    </h2>
+
+                    <p className="mt-4 text-base leading-7 text-slate-600">
+                        Results are not only about marks. Recognition can
+                        encourage students to keep learning, practising and
+                        improving.
+                    </p>
+                </div>
+
+                <div className="mt-10 grid gap-5 md:grid-cols-3">
+                    {rewards.map((reward, index) => {
+                        const Icon = reward.icon;
+
+                        return (
+                            <motion.div
+                                key={reward.title}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{
+                                    delay: index * 0.08,
+                                }}
+                                whileHover={{ y: -6 }}
+                                className="rounded-2xl border border-slate-200/80 bg-white/85 p-6 text-center shadow-[0_15px_40px_rgba(15,23,42,0.05)] backdrop-blur"
+                            >
+                                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                                    <Icon size={21} />
+                                </div>
+
+                                <h3 className="mt-5 font-extrabold text-slate-950">
+                                    {reward.title}
+                                </h3>
+
+                                <p className="mt-2 text-sm leading-6 text-slate-600">
+                                    {reward.description}
+                                </p>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+
+                <div className="mx-auto mt-8 flex max-w-2xl items-center justify-center gap-3 rounded-2xl border border-blue-100 bg-blue-50/60 px-5 py-4 text-center">
+                    <Sparkles
+                        size={18}
+                        className="shrink-0 text-blue-600"
+                    />
+                    <p className="text-sm font-semibold text-slate-700">
+                        Recognition is designed to encourage learning, not
+                        create unnecessary pressure.
+                    </p>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default RewardsRecognition;

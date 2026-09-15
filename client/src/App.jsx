@@ -1,22 +1,30 @@
-import React from "react";
-import {
-    BrowserRouter,
-    Routes,
-    Route,
-} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-import Home from "./pages/Home";
+import Navbar from "./components/common/Navbar";
+import Footer from "./components/common/Footer";
+import AppRoutes from "./routes/AppRoutes";
 
 const App = () => {
+    const location = useLocation();
+
+    const isStudentPortal =
+        location.pathname.startsWith("/student");
+
+    const isAdminPortal =
+        location.pathname.startsWith("/admin");
+
+    const isDashboardPortal =
+        isStudentPortal || isAdminPortal;
+
     return (
-        <BrowserRouter>
-            <Routes>
+        <>
+            {/* Public Website Layout */}
+            {!isDashboardPortal && <Navbar />}
 
-                {/* Main Website */}
-                <Route path="/" element={<Home />} />
+            <AppRoutes />
 
-            </Routes>
-        </BrowserRouter>
+            {!isDashboardPortal && <Footer />}
+        </>
     );
 };
 
