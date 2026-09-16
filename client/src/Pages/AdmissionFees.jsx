@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from "react";
 import SEO from "../components/seo/SEO";
 
 import AdmissionHero from "../components/admission/AdmissionHero";
@@ -8,7 +9,37 @@ import PaymentGuidelines from "../components/admission/PaymentGuidelines";
 import EnrollmentFlow from "../components/admission/EnrollmentFlow";
 import AdmissionCTA from "../components/admission/AdmissionCTA";
 
+import { getCourses } from "../services/api";
+import useApi from "../hooks/useApi";
+
 const AdmissionFees = () => {
+  const {
+    data,
+    loading,
+    error,
+    execute,
+  } = useApi(getCourses);
+
+  useEffect(() => {
+    execute();
+  }, [execute]);
+
+  const courses = useMemo(() => {
+    if (Array.isArray(data?.data)) {
+      return data.data;
+    }
+
+    if (Array.isArray(data)) {
+      return data;
+    }
+
+    if (Array.isArray(data?.courses)) {
+      return data.courses;
+    }
+
+    return [];
+  }, [data]);
+
   return (
     <>
       <SEO
@@ -25,7 +56,11 @@ const AdmissionFees = () => {
         <AdmissionProcess />
 
         {/* 03 — Fee Structure */}
-        <FeeStructure />
+        <FeeStructure
+          courses={courses}
+          loading={loading}
+          error={error}
+        />
 
         {/* 04 — Installment Payments */}
         <InstallmentPlan />

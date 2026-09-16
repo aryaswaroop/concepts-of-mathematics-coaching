@@ -18,7 +18,7 @@ const benefits = [
 
 const HeroSection = () => {
     return (
-        <section className="relative isolate overflow-hidden border-b border-slate-200 bg-white">
+        <section className="relative isolate overflow-hidden bg-white"> {/*border-b border-slate-200*/}
             {/* =========================================
                 Background Mathematical Patterns
             ========================================== */}

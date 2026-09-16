@@ -18,7 +18,7 @@ const topics = [
     "Preparation for Class 12",
 ];
 
-const Class11Course = () => {
+const Class11Course = ({ course }) => {
     return (
         <section
             id="class-11"
@@ -51,25 +51,34 @@ const Class11Course = () => {
                                     </span>
                                 </div>
 
-                                <div className="mt-8">
+                                <div className="mt-8 mb-4">
                                     <p className="font-mono text-sm text-blue-600">
                                         f(x) = foundation
                                     </p>
 
                                     <h3 className="mt-3 text-3xl font-extrabold tracking-[-0.04em] text-slate-950">
-                                        Class 11
+                                        {course?.name || "Class 11"}
                                         <span className="block text-blue-600">
-                                            Mathematics
+                                            {course?.subject || "Mathematics"}
                                         </span>
                                     </h3>
 
                                     <p className="mt-4 text-sm leading-6 text-slate-600">
-                                        A strong Class 11 foundation helps
-                                        students understand higher-level
-                                        Mathematics with greater confidence.
+                                        {course?.description ||
+                                            "A strong Class 11 foundation helps students understand higher-level Mathematics with greater confidence."}
                                     </p>
                                 </div>
+                                {course?.originalFee && (
+                                    <div className="mb-4 flex items-center justify-between rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3">
+                                        <span className="text-xs font-bold uppercase tracking-wide text-slate-500">
+                                            Annual Fee
+                                        </span>
 
+                                        <span className="text-base font-extrabold text-blue-700">
+                                            ₹{course.originalFee}
+                                        </span>
+                                    </div>
+                                )}
                                 <div className="mt-7 grid grid-cols-2 gap-3">
                                     <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
                                         <FunctionSquare className="h-5 w-5 text-blue-600" />

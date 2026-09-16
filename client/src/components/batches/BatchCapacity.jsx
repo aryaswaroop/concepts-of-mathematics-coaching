@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import {
     AlertCircle,
@@ -9,7 +10,61 @@ import {
 import { Link } from "react-router-dom";
 import MathPattern from "../common/MathPattern";
 
-const BatchCapacity = () => {
+const BatchCapacity = ({ batches = [] }) => {
+    const capacityStats = useMemo(() => {
+        if (!batches.length) {
+            return {
+                totalCapacity: 0,
+                currentStrength: 0,
+                availableSeats: 0,
+                utilization: 0,
+                fullBatches: 0,
+            };
+        }
+
+        const totalCapacity = batches.reduce(
+            (total, batch) => total + Number(batch.capacity || 0),
+            0
+        );
+
+        const currentStrength = batches.reduce(
+            (total, batch) =>
+                total + Number(batch.currentStrength || 0),
+            0
+        );
+
+        const availableSeats = batches.reduce(
+            (total, batch) =>
+                total + Number(batch.availableSeats || 0),
+            0
+        );
+
+        const fullBatches = batches.filter(
+            (batch) =>
+                Number(batch.availableSeats || 0) === 0
+        ).length;
+
+        const utilization =
+            totalCapacity > 0
+                ? Math.round(
+                    (currentStrength / totalCapacity) * 100
+                )
+                : 0;
+
+        return {
+            totalCapacity,
+            currentStrength,
+            availableSeats,
+            utilization,
+            fullBatches,
+        };
+    }, [batches]);
+
+    const progressWidth = Math.min(
+        capacityStats.utilization,
+        100
+    );
+
     return (
         <section className="relative overflow-hidden bg-white py-14 sm:py-16 lg:py-20">
             <MathPattern variant="grid" />
@@ -53,19 +108,20 @@ const BatchCapacity = () => {
                             </div>
 
                             <div className="mt-8">
+
                                 <div className="flex items-end justify-between">
                                     <div>
                                         <p className="text-sm font-medium text-slate-500">
-                                            Capacity is teacher-managed
+                                            Current utilization
                                         </p>
 
                                         <p className="mt-2 text-3xl font-extrabold text-slate-950">
-                                            Flexible
+                                            {capacityStats.utilization}%
                                         </p>
                                     </div>
 
                                     <span className="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700">
-                                        Managed
+                                        Live
                                     </span>
                                 </div>
 
@@ -75,7 +131,7 @@ const BatchCapacity = () => {
                                             width: 0,
                                         }}
                                         whileInView={{
-                                            width: "72%",
+                                            width: `${progressWidth}%`,
                                         }}
                                         viewport={{
                                             once: true,
@@ -88,19 +144,54 @@ const BatchCapacity = () => {
                                     />
                                 </div>
 
+                                <div className="mt-4 grid grid-cols-3 gap-3">
+
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                        <p className="text-xs text-slate-500">
+                                            Capacity
+                                        </p>
+
+                                        <p className="mt-1 text-lg font-extrabold text-slate-900">
+                                            {capacityStats.totalCapacity}
+                                        </p>
+                                    </div>
+
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                        <p className="text-xs text-slate-500">
+                                            Students
+                                        </p>
+
+                                        <p className="mt-1 text-lg font-extrabold text-slate-900">
+                                            {capacityStats.currentStrength}
+                                        </p>
+                                    </div>
+
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                        <p className="text-xs text-slate-500">
+                                            Available
+                                        </p>
+
+                                        <p className="mt-1 text-lg font-extrabold text-slate-900">
+                                            {capacityStats.availableSeats}
+                                        </p>
+                                    </div>
+
+                                </div>
+
                                 <p className="mt-3 text-xs leading-5 text-slate-500">
-                                    The visual represents capacity management,
-                                    not a live seat count. Live availability
-                                    will be connected to the backend later.
+                                    Capacity and availability are calculated
+                                    from the active batches currently provided
+                                    by the backend.
                                 </p>
                             </div>
 
                             <div className="mt-7 grid gap-3">
+
                                 <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
                                     <CheckCircle2 className="h-5 w-5 text-blue-600" />
 
                                     <p className="text-sm font-semibold text-slate-700">
-                                        Existing batch capacity is respected
+                                        {capacityStats.availableSeats} seats currently available
                                     </p>
                                 </div>
 
@@ -108,9 +199,12 @@ const BatchCapacity = () => {
                                     <PlusCircle className="h-5 w-5 text-blue-600" />
 
                                     <p className="text-sm font-semibold text-slate-700">
-                                        Additional batches can be introduced
+                                        {capacityStats.fullBatches > 0
+                                            ? `${capacityStats.fullBatches} batch${capacityStats.fullBatches > 1 ? "es" : ""} currently full`
+                                            : "Additional batches can be introduced when required"}
                                     </p>
                                 </div>
+
                             </div>
                         </div>
                     </motion.div>
@@ -145,11 +239,11 @@ const BatchCapacity = () => {
                         </h2>
 
                         <p className="mt-5 text-base leading-7 text-slate-600">
-                            Batch capacity is not treated as a fixed marketing
-                            number. It is part of the actual coaching
-                            management process and can be adjusted by the
-                            teacher according to the number of students and
-                            available teaching capacity.
+                            Batch capacity is managed using the actual
+                            student strength and available seats of each
+                            active batch. This allows the coaching
+                            administration to monitor availability and
+                            introduce additional batches when required.
                         </p>
 
                         <div className="mt-7 rounded-2xl border border-blue-100 bg-blue-50/60 p-5">
@@ -175,9 +269,11 @@ const BatchCapacity = () => {
                             className="group mt-7 inline-flex items-center gap-2 text-sm font-bold text-blue-600"
                         >
                             Ask about current availability
+
                             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                         </Link>
                     </motion.div>
+
                 </div>
             </div>
         </section>

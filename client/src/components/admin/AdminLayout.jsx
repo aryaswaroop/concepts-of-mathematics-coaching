@@ -1,29 +1,48 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import {
+    Outlet,
+    useLocation,
+    useNavigate,
+} from "react-router-dom";
 
 import AdminFooter from "./AdminFooter";
 import AdminSidebar from "./AdminSidebar";
 import AdminTopbar from "./AdminTopbar";
 
+import { useAppContext } from "../../context/AppContext";
+
 const AdminLayout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
+
+    const { logout } = useAppContext();
 
     useEffect(() => {
         setSidebarOpen(false);
     }, [location.pathname]);
+
+    const handleLogout = () => {
+        logout();
+        navigate("/auth/login", {
+            replace: true,
+        });
+    };
 
     return (
         <div className="min-h-screen bg-[#f8fafc] text-slate-900">
             <AdminSidebar
                 isOpen={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}
+                onLogout={handleLogout}
             />
 
             <div className="min-h-screen lg:pl-[280px]">
                 <AdminTopbar
-                    onMenuClick={() => setSidebarOpen(true)}
+                    onMenuClick={() =>
+                        setSidebarOpen(true)
+                    }
                 />
 
                 <main className="relative min-h-[calc(100vh-76px)] overflow-hidden">

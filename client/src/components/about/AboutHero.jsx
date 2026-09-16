@@ -173,7 +173,7 @@ const AboutHero = () => {
                                     Our learning equation
                                 </p>
 
-                                <p className="mt-4 text-[clamp(1.7rem,4vw,2.8rem)] font-extrabold tracking-[-0.05em] text-slate-950">
+                                <p className="mt-4 text-[clamp(1.7rem,4vw,2.0rem)] font-extrabold tracking-[-0.05em] text-slate-950">
                                     Concept
                                     <span className="mx-2 text-blue-600">
                                         +

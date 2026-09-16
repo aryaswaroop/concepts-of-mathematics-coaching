@@ -146,7 +146,7 @@ const NavigationGroup = ({ title, items, onClose }) => {
     );
 };
 
-const StudentSidebar = ({ isOpen, onClose }) => {
+const StudentSidebar = ({ isOpen, onClose, onLogout }) => {
     return (
         <>
             {/* Mobile Overlay */}
@@ -274,6 +274,7 @@ const StudentSidebar = ({ isOpen, onClose }) => {
 
                         <button
                             type="button"
+                            onClick={onLogout}
                             className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-white hover:text-red-500"
                             aria-label="Logout"
                         >

@@ -1,4 +1,7 @@
-import { createStudent } from "../services/studentService.js";
+import {
+    createStudent,
+    getStudentByUserId,
+} from "../services/studentService.js";
 
 export const createNewStudent = async (req, res, next) => {
     try {
@@ -35,7 +38,8 @@ export const createNewStudent = async (req, res, next) => {
         if (![11, 12].includes(Number(studentClass))) {
             return res.status(400).json({
                 success: false,
-                message: "Student class must be 11 or 12",
+                message:
+                    "Student class must be 11 or 12",
                 data: null,
             });
         }
@@ -57,6 +61,28 @@ export const createNewStudent = async (req, res, next) => {
         res.status(201).json({
             success: true,
             message: "Student created successfully",
+            data: student,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getMyStudentProfile = async (
+    req,
+    res,
+    next
+) => {
+    try {
+        const student =
+            await getStudentByUserId(
+                req.user._id
+            );
+
+        return res.status(200).json({
+            success: true,
+            message:
+                "Student profile fetched successfully",
             data: student,
         });
     } catch (error) {

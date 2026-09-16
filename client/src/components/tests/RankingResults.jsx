@@ -7,7 +7,11 @@ import {
 } from "lucide-react";
 import MathPattern from "../common/MathPattern";
 
-const RankingResults = () => {
+const RankingResults = ({
+    results = [],
+    loading = false,
+    error = null,
+}) => {
     const rankingFeatures = [
         {
             icon: Trophy,
@@ -25,6 +29,44 @@ const RankingResults = () => {
             text: "Strong and consistent performance can be connected with recognition and rewards.",
         },
     ];
+
+    const publishedResults = results.filter(
+        (result) =>
+            result.evaluationStatus === "EVALUATED" &&
+            result.isPublished === true
+    );
+
+    const latestResult =
+        publishedResults.length > 0
+            ? [...publishedResults].sort(
+                  (a, b) =>
+                      new Date(
+                          b.evaluatedAt ||
+                              b.updatedAt ||
+                              b.createdAt
+                      ) -
+                      new Date(
+                          a.evaluatedAt ||
+                              a.updatedAt ||
+                              a.createdAt
+                      )
+              )[0]
+            : null;
+
+    const scoreText = latestResult
+        ? `${latestResult.marksObtained ?? 0}/${latestResult.testId?.totalMarks ?? 0}`
+        : "—";
+
+    const rankText = latestResult?.rank
+        ? `#${latestResult.rank}`
+        : "—";
+
+    const percentageText = latestResult?.percentage
+        ? `${latestResult.percentage}%`
+        : "—";
+
+    const testTitle =
+        latestResult?.testId?.title || "Test Result";
 
     return (
         <section className="relative overflow-hidden bg-white py-16 sm:py-20">
@@ -78,6 +120,7 @@ const RankingResults = () => {
                                             <h3 className="font-extrabold text-slate-950">
                                                 {item.title}
                                             </h3>
+
                                             <p className="mt-1 text-sm leading-6 text-slate-600">
                                                 {item.text}
                                             </p>
@@ -94,8 +137,11 @@ const RankingResults = () => {
                                 <p className="text-xs font-bold uppercase tracking-[0.14em] text-blue-600">
                                     Results Dashboard
                                 </p>
+
                                 <h3 className="mt-1 text-xl font-extrabold text-slate-950">
-                                    Test Result
+                                    {latestResult
+                                        ? testTitle
+                                        : "Test Result"}
                                 </h3>
                             </div>
 
@@ -105,31 +151,87 @@ const RankingResults = () => {
                             />
                         </div>
 
-                        <div className="py-8 text-center">
-                            <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-8 border-blue-50">
-                                <span className="text-2xl font-extrabold text-slate-300">
-                                    —
-                                </span>
+                        {loading ? (
+                            <div className="py-8 text-center">
+                                <div className="mx-auto h-24 w-24 animate-pulse rounded-full border-8 border-slate-100" />
+
+                                <p className="mt-5 font-bold text-slate-800">
+                                    Loading results...
+                                </p>
+
+                                <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500">
+                                    Published result information is being
+                                    loaded.
+                                </p>
                             </div>
+                        ) : error ? (
+                            <div className="py-8 text-center">
+                                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-8 border-red-50">
+                                    <span className="text-2xl font-extrabold text-red-300">
+                                        !
+                                    </span>
+                                </div>
 
-                            <p className="mt-5 font-bold text-slate-800">
-                                Result awaiting data
-                            </p>
+                                <p className="mt-5 font-bold text-slate-800">
+                                    Results unavailable
+                                </p>
 
-                            <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500">
-                                Actual marks, ranking and performance
-                                information will appear here after backend
-                                integration.
-                            </p>
-                        </div>
+                                <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500">
+                                    Published result information is
+                                    temporarily unavailable.
+                                </p>
+                            </div>
+                        ) : latestResult ? (
+                            <div className="py-8 text-center">
+                                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-8 border-blue-50">
+                                    <span className="text-2xl font-extrabold text-blue-600">
+                                        {percentageText}
+                                    </span>
+                                </div>
+
+                                <p className="mt-5 font-bold text-slate-800">
+                                    Published result available
+                                </p>
+
+                                <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500">
+                                    Performance and ranking information is
+                                    available for published assessments.
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="py-8 text-center">
+                                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-8 border-blue-50">
+                                    <span className="text-2xl font-extrabold text-slate-300">
+                                        —
+                                    </span>
+                                </div>
+
+                                <p className="mt-5 font-bold text-slate-800">
+                                    Result awaiting data
+                                </p>
+
+                                <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500">
+                                    Actual marks, ranking and performance
+                                    information will appear here after
+                                    results are evaluated and published.
+                                </p>
+                            </div>
+                        )}
 
                         <div className="grid grid-cols-2 gap-3">
                             <div className="rounded-xl bg-slate-50 p-4">
                                 <p className="text-xs font-semibold text-slate-400">
                                     Score
                                 </p>
-                                <p className="mt-1 text-xl font-extrabold text-slate-300">
-                                    —
+
+                                <p
+                                    className={`mt-1 text-xl font-extrabold ${
+                                        latestResult
+                                            ? "text-slate-950"
+                                            : "text-slate-300"
+                                    }`}
+                                >
+                                    {scoreText}
                                 </p>
                             </div>
 
@@ -137,8 +239,15 @@ const RankingResults = () => {
                                 <p className="text-xs font-semibold text-slate-400">
                                     Rank
                                 </p>
-                                <p className="mt-1 text-xl font-extrabold text-slate-300">
-                                    —
+
+                                <p
+                                    className={`mt-1 text-xl font-extrabold ${
+                                        latestResult
+                                            ? "text-slate-950"
+                                            : "text-slate-300"
+                                    }`}
+                                >
+                                    {rankText}
                                 </p>
                             </div>
                         </div>

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import {
     Clock3,
@@ -30,7 +31,50 @@ const supportItems = [
     },
 ];
 
-const ImprovementSupport = () => {
+const ImprovementSupport = ({
+    supportSessions = [],
+    loading = false,
+    error = null,
+}) => {
+    const scheduledSessions = useMemo(() => {
+        return supportSessions.filter(
+            (session) =>
+                session &&
+                session.status &&
+                session.status.toUpperCase() === "SCHEDULED"
+        );
+    }, [supportSessions]);
+
+    const latestSession = useMemo(() => {
+        if (scheduledSessions.length === 0) {
+            return null;
+        }
+
+        return [...scheduledSessions].sort(
+            (a, b) =>
+                new Date(a.date || 0) -
+                new Date(b.date || 0)
+        )[0];
+    }, [scheduledSessions]);
+
+    const formatDate = (date) => {
+        if (!date) return "";
+
+        const parsedDate = new Date(date);
+
+        if (Number.isNaN(parsedDate.getTime())) {
+            return "";
+        }
+
+        return parsedDate.toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        });
+    };
+
+    const hasScheduledSession = Boolean(latestSession);
+
     return (
         <section className="relative overflow-hidden bg-white py-16 sm:py-20">
             <MathPattern variant="grid" />
@@ -73,6 +117,64 @@ const ImprovementSupport = () => {
                                 Improvement
                             </p>
                         </div>
+
+                        {!loading && hasScheduledSession && (
+                            <div className="mt-5 rounded-2xl border border-blue-400/20 bg-blue-500/10 p-5">
+                                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-blue-300">
+                                    Support Session Scheduled
+                                </p>
+
+                                <p className="mt-3 text-sm font-semibold text-white">
+                                    Additional guidance is part of the
+                                    coaching support system.
+                                </p>
+
+                                {latestSession.date && (
+                                    <p className="mt-2 text-sm text-slate-400">
+                                        Scheduled for{" "}
+                                        {formatDate(
+                                            latestSession.date
+                                        )}
+                                        {latestSession.startTime &&
+                                            latestSession.endTime
+                                            ? ` • ${latestSession.startTime}–${latestSession.endTime}`
+                                            : ""}
+                                    </p>
+                                )}
+                            </div>
+                        )}
+
+                        {!loading &&
+                            !hasScheduledSession &&
+                            !error && (
+                                <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-5">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+                                        Support availability
+                                    </p>
+
+                                    <p className="mt-3 text-sm leading-6 text-slate-400">
+                                        Additional guidance can be arranged
+                                        when students need focused support.
+                                    </p>
+                                </div>
+                            )}
+
+                        {!loading && error && (
+                            <div className="mt-5 rounded-2xl border border-red-400/20 bg-red-500/10 p-5">
+                                <p className="text-sm font-semibold text-white">
+                                    Support information is temporarily
+                                    unavailable.
+                                </p>
+                            </div>
+                        )}
+
+                        {loading && (
+                            <div className="mt-5 animate-pulse rounded-2xl border border-white/10 bg-white/5 p-5">
+                                <div className="h-3 w-36 rounded bg-white/10" />
+                                <div className="mt-3 h-4 w-full rounded bg-white/10" />
+                                <div className="mt-2 h-4 w-4/5 rounded bg-white/10" />
+                            </div>
+                        )}
                     </div>
                 </div>
 

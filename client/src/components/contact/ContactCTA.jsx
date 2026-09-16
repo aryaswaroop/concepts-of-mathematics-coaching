@@ -89,8 +89,8 @@ const ContactCTA = () => {
                         </p>
 
                         <div className="mt-8 flex flex-wrap justify-center gap-3">
-                            <Link
-                                to="#enquiry"
+                            <a
+                                href="#enquiry"
                                 className="group inline-flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3.5 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-600"
                             >
                                 Send an Enquiry
@@ -99,7 +99,7 @@ const ContactCTA = () => {
                                     size={17}
                                     className="transition-transform duration-300 group-hover:translate-x-1"
                                 />
-                            </Link>
+                            </a>
 
                             <Link
                                 to="/admission-fees"

@@ -111,7 +111,7 @@ const AdmissionCTA = () => {
                         </div>
 
                         <div className="mt-9 text-xs font-semibold text-slate-400">
-                            Course → Batch → Enrollment → Payment
+                            Enquiry → Course → Batch → Enrollment → Payment
                         </div>
                     </div>
                 </div>

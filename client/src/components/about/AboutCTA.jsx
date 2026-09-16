@@ -134,7 +134,7 @@ const AboutCTA = () => {
                                 duration: 0.6,
                                 delay: 0.05,
                             }}
-                            className="mx-auto max-w-3xl text-3xl font-extrabold leading-[1.08] tracking-[-0.045em] text-slate-950 sm:text-4xl lg:text-5xl"
+                            className="mx-auto max-w-3xl text-2xl font-extrabold leading-[1.08] tracking-[-0.045em] text-slate-950 sm:text-4xl lg:text-5xl"
                         >
                             Build stronger mathematical
                             <span className="text-blue-600">
@@ -225,7 +225,7 @@ const AboutCTA = () => {
                         >
                             <Link
                                 to="/contact"
-                                className="group inline-flex min-w-[190px] items-center justify-center gap-2 rounded-xl bg-slate-950 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-slate-950/10 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-600 hover:shadow-blue-600/20"
+                                className="group inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3.5 text-[15px] font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-600/20"
                             >
                                 Enquire About Admission
 

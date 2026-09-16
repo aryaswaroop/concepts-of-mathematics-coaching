@@ -55,9 +55,9 @@ const EnquirySection = () => {
                                     />
 
                                     <p className="text-sm font-semibold leading-6 text-slate-700">
-                                        Once connected to the backend, every
-                                        submitted enquiry can be stored and
-                                        managed through the coaching system.
+                                        Your enquiry is securely recorded
+                                        through the coaching system and can
+                                        be followed up by the institute.
                                     </p>
                                 </div>
                             </div>

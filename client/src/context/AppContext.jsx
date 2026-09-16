@@ -1,21 +1,46 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
+
+import {
+    getCurrentUser,
+    loginUser,
+} from "../services/api";
 
 const AppContext = createContext(null);
 
 export const AppProvider = ({ children }) => {
-    // Global application state
-    const [isAppLoading, setIsAppLoading] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isAppLoading, setIsAppLoading] =
+        useState(false);
 
-    // Authentication state foundation
-    // Actual authentication will be connected later.
+    const [isMobileMenuOpen, setIsMobileMenuOpen] =
+        useState(false);
+
     const [user, setUser] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Global UI state
-    const [notification, setNotification] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] =
+        useState(false);
 
-    const showNotification = (message, type = "info") => {
+    const [isAuthLoading, setIsAuthLoading] =
+        useState(true);
+
+    const [notification, setNotification] =
+        useState(null);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Notification
+    |--------------------------------------------------------------------------
+    */
+
+    const showNotification = (
+        message,
+        type = "info"
+    ) => {
         setNotification({
             message,
             type,
@@ -26,30 +51,126 @@ export const AppProvider = ({ children }) => {
         setNotification(null);
     };
 
+    /*
+    |--------------------------------------------------------------------------
+    | Login
+    |--------------------------------------------------------------------------
+    */
+
+    const login = async (credentials) => {
+        const response = await loginUser(
+            credentials
+        );
+
+        const {
+            token,
+            user: loggedInUser,
+        } = response.data;
+
+        localStorage.setItem(
+            "authToken",
+            token
+        );
+
+        localStorage.setItem(
+            "authUser",
+            JSON.stringify(loggedInUser)
+        );
+
+        setUser(loggedInUser);
+        setIsAuthenticated(true);
+
+        return loggedInUser;
+    };
+
+    /*
+    |--------------------------------------------------------------------------
+    | Logout
+    |--------------------------------------------------------------------------
+    */
+
     const logout = () => {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("authUser");
+
         setUser(null);
         setIsAuthenticated(false);
         setNotification(null);
     };
 
+    /*
+    |--------------------------------------------------------------------------
+    | Restore Authentication
+    |--------------------------------------------------------------------------
+    */
+
+    useEffect(() => {
+        const restoreAuthentication =
+            async () => {
+                const token =
+                    localStorage.getItem(
+                        "authToken"
+                    );
+
+                if (!token) {
+                    setIsAuthLoading(false);
+                    return;
+                }
+
+                try {
+                    const response =
+                        await getCurrentUser();
+
+                    const currentUser =
+                        response.data.user;
+
+                    setUser(currentUser);
+                    setIsAuthenticated(true);
+
+                    localStorage.setItem(
+                        "authUser",
+                        JSON.stringify(
+                            currentUser
+                        )
+                    );
+                } catch (error) {
+                    localStorage.removeItem(
+                        "authToken"
+                    );
+
+                    localStorage.removeItem(
+                        "authUser"
+                    );
+
+                    setUser(null);
+                    setIsAuthenticated(false);
+                } finally {
+                    setIsAuthLoading(false);
+                }
+            };
+
+        restoreAuthentication();
+    }, []);
+
     const value = useMemo(
         () => ({
-            // Application loading
             isAppLoading,
             setIsAppLoading,
 
-            // Mobile navigation
             isMobileMenuOpen,
             setIsMobileMenuOpen,
 
-            // Authentication foundation
             user,
             setUser,
+
             isAuthenticated,
             setIsAuthenticated,
+
+            isAuthLoading,
+
+            login,
             logout,
 
-            // Notifications
             notification,
             showNotification,
             clearNotification,
@@ -59,6 +180,7 @@ export const AppProvider = ({ children }) => {
             isMobileMenuOpen,
             user,
             isAuthenticated,
+            isAuthLoading,
             notification,
         ]
     );

@@ -14,10 +14,20 @@ import StudentPayments from "../pages/student/StudentPayments";
 import StudentProfile from "../pages/student/StudentProfile";
 import StudentSettings from "../pages/student/StudentSettings";
 
+import ProtectedRoute from "./ProtectedRoute";
+
 const StudentRoutes = () => {
     return (
         <Routes>
-            <Route element={<StudentLayout />}>
+            <Route
+                element={
+                    <ProtectedRoute
+                        allowedRoles={["STUDENT"]}
+                    >
+                        <StudentLayout />
+                    </ProtectedRoute>
+                }
+            >
                 <Route
                     index
                     element={
@@ -72,6 +82,7 @@ const StudentRoutes = () => {
                     path="payments"
                     element={<StudentPayments />}
                 />
+
                 <Route
                     path="profile"
                     element={<StudentProfile />}

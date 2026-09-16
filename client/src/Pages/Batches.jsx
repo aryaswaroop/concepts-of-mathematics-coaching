@@ -1,3 +1,5 @@
+import { useEffect, useMemo } from "react";
+
 import SEO from "../components/seo/SEO";
 
 import BatchesHero from "../components/batches/BatchesHero";
@@ -7,7 +9,61 @@ import BatchStructure from "../components/batches/BatchStructure";
 import BatchCapacity from "../components/batches/BatchCapacity";
 import BatchesCTA from "../components/batches/BatchesCTA";
 
+import { getBatches } from "../services/api";
+import useApi from "../hooks/useApi";
+
 const Batches = () => {
+  const {
+    data,
+    loading,
+    error,
+    execute,
+  } = useApi(getBatches);
+
+  useEffect(() => {
+    execute();
+  }, [execute]);
+
+  const batches = useMemo(() => {
+    if (Array.isArray(data)) {
+      return data;
+    }
+
+    if (Array.isArray(data?.data)) {
+      return data.data;
+    }
+
+    if (Array.isArray(data?.batches)) {
+      return data.batches;
+    }
+
+    return [];
+  }, [data]);
+
+  const activeBatches = useMemo(() => {
+    return batches.filter(
+      (batch) =>
+        batch.status === "ACTIVE" &&
+        !batch.name
+          ?.toLowerCase()
+          .includes("capacity test")
+    );
+  }, [batches]);
+
+  const class11Batches = useMemo(() => {
+    return activeBatches.filter(
+      (batch) =>
+        Number(batch.courseId?.class) === 11
+    );
+  }, [activeBatches]);
+
+  const class12Batches = useMemo(() => {
+    return activeBatches.filter(
+      (batch) =>
+        Number(batch.courseId?.class) === 12
+    );
+  }, [activeBatches]);
+
   return (
     <>
       <SEO
@@ -21,7 +77,7 @@ const Batches = () => {
         <BatchesHero />
 
         {/* 02 — Morning / Evening */}
-        <BatchSchedule />
+        <BatchSchedule batches={activeBatches} />
 
         {/* 03 — Current Batch Structure */}
         <section className="relative overflow-hidden bg-white py-8 sm:py-10">
@@ -37,34 +93,126 @@ const Batches = () => {
               </h2>
             </div>
 
-            <div className="grid gap-5 lg:grid-cols-2">
-              <BatchCard
-                name="Class 11 Mathematics Batch"
-                course="Class 11 Mathematics"
-                timing="Morning / Evening"
-                schedule="Teacher managed"
-                capacity="Defined per batch"
-                status="Batch availability"
-                description="Focused Class 11 learning with concept building, practice and regular evaluation."
-              />
+            {loading && (
+              <div className="grid gap-5 lg:grid-cols-2">
+                <div className="h-64 animate-pulse rounded-[2rem] bg-slate-100" />
+                <div className="h-64 animate-pulse rounded-[2rem] bg-slate-100" />
+              </div>
+            )}
 
-              <BatchCard
-                name="Class 12 Mathematics Batch"
-                course="Class 12 Mathematics"
-                timing="Morning / Evening"
-                schedule="Teacher managed"
-                capacity="Defined per batch"
-                status="Batch availability"
-                description="Class 12 preparation with regular testing, revision and board-oriented practice."
-              />
-            </div>
+            {!loading && error && (
+              <div className="rounded-2xl border border-red-100 bg-red-50 px-5 py-4 text-sm text-red-700">
+                Unable to load batch information right now.
+              </div>
+            )}
 
-            <p className="mt-5 text-xs leading-5 text-slate-500">
-              The batch cards above represent the current UI
-              structure. Actual batch names, timings, capacity
-              and availability will be populated from the
-              backend when API integration begins.
-            </p>
+            {!loading && !error && (
+              <div className="grid gap-5 lg:grid-cols-2">
+
+                <BatchCard
+                  name={
+                    class11Batches[0]?.name ||
+                    "Class 11 Mathematics Batch"
+                  }
+                  course={
+                    class11Batches[0]?.courseId?.name ||
+                    "Class 11 Mathematics"
+                  }
+                  timing={
+                    class11Batches.length > 0
+                      ? class11Batches
+                        .map(
+                          (batch) =>
+                            `${batch.startTime} - ${batch.endTime}`
+                        )
+                        .join(" / ")
+                      : "Morning / Evening"
+                  }
+                  schedule="Teacher managed"
+                  capacity={
+                    class11Batches.length > 0
+                      ? class11Batches
+                        .map(
+                          (batch) =>
+                            `${batch.capacity} seats`
+                        )
+                        .join(" / ")
+                      : "Defined per batch"
+                  }
+                  status={
+                    class11Batches.length > 0
+                      ? class11Batches
+                        .map(
+                          (batch) =>
+                            `${batch.availableSeats} seats available`
+                        )
+                        .join(" / ")
+                      : "Batch availability"
+                  }
+                  description={
+                    class11Batches[0]?.courseId?.class === 11
+                      ? "Focused Class 11 learning with concept building, practice and regular evaluation."
+                      : "Focused Class 11 Mathematics learning with concept building, practice and regular evaluation."
+                  }
+                />
+
+                <BatchCard
+                  name={
+                    class12Batches[0]?.name ||
+                    "Class 12 Mathematics Batch"
+                  }
+                  course={
+                    class12Batches[0]?.courseId?.name ||
+                    "Class 12 Mathematics"
+                  }
+                  timing={
+                    class12Batches.length > 0
+                      ? class12Batches
+                        .map(
+                          (batch) =>
+                            `${batch.startTime} - ${batch.endTime}`
+                        )
+                        .join(" / ")
+                      : "Morning / Evening"
+                  }
+                  schedule="Teacher managed"
+                  capacity={
+                    class12Batches.length > 0
+                      ? class12Batches
+                        .map(
+                          (batch) =>
+                            `${batch.capacity} seats`
+                        )
+                        .join(" / ")
+                      : "Defined per batch"
+                  }
+                  status={
+                    class12Batches.length > 0
+                      ? class12Batches
+                        .map(
+                          (batch) =>
+                            `${batch.availableSeats} seats available`
+                        )
+                        .join(" / ")
+                      : "Batch availability"
+                  }
+                  description={
+                    class12Batches[0]?.courseId?.class === 12
+                      ? "Class 12 preparation with regular testing, revision and board-oriented practice."
+                      : "Class 12 Mathematics preparation with regular testing, revision and board-oriented practice."
+                  }
+                />
+
+              </div>
+            )}
+
+            {!loading && !error && (
+              <p className="mt-5 text-xs leading-5 text-slate-500">
+                Batch names, timings, capacity and current
+                availability are populated from the latest
+                batch information.
+              </p>
+            )}
           </div>
         </section>
 
@@ -72,7 +220,8 @@ const Batches = () => {
         <BatchStructure />
 
         {/* 05 — Capacity */}
-        <BatchCapacity />
+        {/* 05 — Capacity */}
+        <BatchCapacity batches={activeBatches} />
 
         {/* 06 — CTA */}
         <BatchesCTA />

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import {
     ArrowRight,
@@ -9,24 +10,34 @@ import {
 import { Link } from "react-router-dom";
 import MathPattern from "../common/MathPattern";
 
-const schedules = [
-    {
-        type: "Morning",
-        icon: Sunrise,
-        description:
-            "Morning batches provide a focused learning window for students who prefer earlier study hours.",
-        availability: "Schedule managed by the teacher",
-    },
-    {
-        type: "Evening",
-        icon: Sunset,
-        description:
-            "Evening batches provide another learning option for students whose daytime schedule is occupied.",
-        availability: "Schedule managed by the teacher",
-    },
-];
+const BatchSchedule = ({ batches = [] }) => {
+    const schedules = useMemo(() => {
+        const morningBatches = batches.filter(
+            (batch) => batch.shift === "MORNING"
+        );
 
-const BatchSchedule = () => {
+        const eveningBatches = batches.filter(
+            (batch) => batch.shift === "EVENING"
+        );
+
+        return [
+            {
+                type: "Morning",
+                icon: Sunrise,
+                description:
+                    "Morning batches provide a focused learning window for students who prefer earlier study hours.",
+                batches: morningBatches,
+            },
+            {
+                type: "Evening",
+                icon: Sunset,
+                description:
+                    "Evening batches provide another learning option for students whose daytime schedule is occupied.",
+                batches: eveningBatches,
+            },
+        ];
+    }, [batches]);
+
     return (
         <section
             id="batch-schedule"
@@ -55,6 +66,30 @@ const BatchSchedule = () => {
                 <div className="mt-10 grid gap-5 lg:grid-cols-2">
                     {schedules.map((schedule, index) => {
                         const Icon = schedule.icon;
+
+                        const timingText =
+                            schedule.batches.length > 0
+                                ? schedule.batches
+                                    .map(
+                                        (batch) =>
+                                            `${batch.startTime} - ${batch.endTime}`
+                                    )
+                                    .join(" / ")
+                                : "No active batch currently available";
+
+                        const courseText =
+                            schedule.batches.length > 0
+                                ? [
+                                    ...new Set(
+                                        schedule.batches
+                                            .map(
+                                                (batch) =>
+                                                    batch.courseId?.name
+                                            )
+                                            .filter(Boolean)
+                                    ),
+                                ].join(" / ")
+                                : "Class 11 or Class 12";
 
                         return (
                             <motion.div
@@ -107,7 +142,7 @@ const BatchSchedule = () => {
                                         </p>
 
                                         <p className="text-xs text-slate-500">
-                                            {schedule.availability}
+                                            {timingText}
                                         </p>
                                     </div>
                                 </div>
@@ -121,7 +156,7 @@ const BatchSchedule = () => {
                                         </p>
 
                                         <p className="text-xs text-slate-500">
-                                            Class 11 or Class 12
+                                            {courseText}
                                         </p>
                                     </div>
                                 </div>

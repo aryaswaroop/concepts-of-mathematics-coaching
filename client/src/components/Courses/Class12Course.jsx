@@ -18,7 +18,7 @@ const topics = [
     "Performance improvement",
 ];
 
-const Class12Course = () => {
+const Class12Course = ({ course }) => {
     return (
         <section className="relative overflow-hidden bg-white py-14 sm:py-16 lg:py-20">
             <MathPattern variant="grid" />
@@ -99,25 +99,34 @@ const Class12Course = () => {
                                     </span>
                                 </div>
 
-                                <div className="mt-8">
+                                <div className="mt-8 mb-4">
                                     <p className="font-mono text-sm text-blue-600">
                                         Progress = Practice + Evaluation
                                     </p>
 
                                     <h3 className="mt-3 text-3xl font-extrabold tracking-[-0.04em] text-slate-950">
-                                        Class 12
+                                        {course?.name || "Class 12"}
                                         <span className="block text-blue-600">
-                                            Mathematics
+                                            {course?.subject || "Mathematics"}
                                         </span>
                                     </h3>
 
                                     <p className="mt-4 text-sm leading-6 text-slate-600">
-                                        Structured preparation focused on
-                                        understanding, practice, testing and
-                                        board-oriented revision.
+                                        {course?.description ||
+                                            "Structured preparation focused on understanding, practice, testing and board-oriented revision."}
                                     </p>
                                 </div>
+                                {course?.originalFee && (
+                                    <div className="mb-4 flex items-center justify-between rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3">
+                                        <span className="text-xs font-bold uppercase tracking-wide text-slate-500">
+                                            Annual Fee
+                                        </span>
 
+                                        <span className="text-base font-extrabold text-blue-700">
+                                            ₹{course.originalFee}
+                                        </span>
+                                    </div>
+                                )}
                                 <div className="mt-7 space-y-3">
                                     <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
                                         <ClipboardCheck className="h-5 w-5 text-blue-600" />

@@ -4,6 +4,8 @@ import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
 import AppRoutes from "./routes/AppRoutes";
 
+import ScrollToTop from "./components/common/ScrollToTop";
+
 const App = () => {
     const location = useLocation();
 
@@ -13,17 +15,26 @@ const App = () => {
     const isAdminPortal =
         location.pathname.startsWith("/admin");
 
-    const isDashboardPortal =
-        isStudentPortal || isAdminPortal;
+    const isAuthPage =
+        location.pathname.startsWith("/auth") ||
+        location.pathname === "/login";
+
+    const isSpecialLayout =
+        isStudentPortal ||
+        isAdminPortal ||
+        isAuthPage;
 
     return (
         <>
+
+            <ScrollToTop />
+
             {/* Public Website Layout */}
-            {!isDashboardPortal && <Navbar />}
+            {!isSpecialLayout && <Navbar />}
 
             <AppRoutes />
 
-            {!isDashboardPortal && <Footer />}
+            {!isSpecialLayout && <Footer />}
         </>
     );
 };

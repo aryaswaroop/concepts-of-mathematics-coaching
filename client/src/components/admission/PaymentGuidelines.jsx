@@ -12,22 +12,22 @@ const PaymentGuidelines = () => {
         {
             icon: FileText,
             title: "Keep Payment Records Clear",
-            text: "Each payment should be properly recorded against the student's enrollment.",
+            text: "Each payment is recorded against the student's enrollment so the payment history remains organized.",
         },
         {
             icon: CheckCircle2,
             title: "Approved Discounts",
-            text: "Any discount agreed by the coaching institute should be reflected through the applicable payment arrangement.",
+            text: "Any discount approved by the coaching institute is reflected in the applicable enrollment fee arrangement.",
         },
         {
             icon: ShieldCheck,
             title: "Enrollment-Based Tracking",
-            text: "Payment information remains connected with the student's admission/enrollment record.",
+            text: "Payment information remains connected with the student's admission and enrollment record.",
         },
         {
             icon: Info,
             title: "Confirm Before Payment",
-            text: "Students should confirm the current payable amount and installment arrangement before making a payment.",
+            text: "Students should confirm the current payable amount and agreed installment arrangement before making a payment.",
         },
     ];
 
@@ -46,9 +46,9 @@ const PaymentGuidelines = () => {
                     </h2>
 
                     <p className="mt-4 text-base leading-7 text-slate-600">
-                        The website explains the structure, while actual
-                        payment information will always come from the
-                        enrollment and payment records.
+                        The website explains the payment structure, while
+                        actual payment information is maintained through the
+                        student's enrollment and payment records.
                     </p>
                 </div>
 
@@ -72,6 +72,9 @@ const PaymentGuidelines = () => {
                                 }}
                                 transition={{
                                     delay: index * 0.07,
+                                }}
+                                whileHover={{
+                                    y: -4,
                                 }}
                                 className="flex gap-4 rounded-2xl border border-slate-200/80 bg-white/85 p-6 shadow-[0_12px_35px_rgba(15,23,42,0.04)] backdrop-blur"
                             >

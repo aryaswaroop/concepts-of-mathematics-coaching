@@ -7,6 +7,27 @@ import {
 import MathPattern from "../common/MathPattern";
 
 const InstallmentPlan = () => {
+    const paymentItems = [
+        {
+            icon: CircleDollarSign,
+            title: "Total Fee",
+            text: "Based on the selected course",
+            detail: "Class 11 or Class 12 course fee",
+        },
+        {
+            icon: Receipt,
+            title: "Paid",
+            text: "Recorded payment entries",
+            detail: "Each payment is maintained against enrollment",
+        },
+        {
+            icon: Calculator,
+            title: "Balance",
+            text: "Remaining amount",
+            detail: "Calculated from the enrollment payment records",
+        },
+    ];
+
     return (
         <section className="relative overflow-hidden bg-white py-16 sm:py-20">
             <MathPattern variant="grid" />
@@ -49,23 +70,7 @@ const InstallmentPlan = () => {
                     </div>
 
                     <div className="grid gap-4 sm:grid-cols-3">
-                        {[
-                            {
-                                icon: CircleDollarSign,
-                                title: "Total Fee",
-                                text: "Course-level fee",
-                            },
-                            {
-                                icon: Receipt,
-                                title: "Paid",
-                                text: "Recorded payments",
-                            },
-                            {
-                                icon: Calculator,
-                                title: "Balance",
-                                text: "Remaining amount",
-                            },
-                        ].map((item, index) => {
+                        {paymentItems.map((item, index) => {
                             const Icon = item.icon;
 
                             return (
@@ -102,7 +107,11 @@ const InstallmentPlan = () => {
                                         {item.text}
                                     </p>
 
-                                    <div className="mt-5 h-10 rounded-xl bg-slate-50" />
+                                    <div className="mt-5 rounded-xl bg-slate-50 px-3 py-3">
+                                        <p className="text-xs font-medium leading-5 text-slate-500">
+                                            {item.detail}
+                                        </p>
+                                    </div>
                                 </motion.div>
                             );
                         })}

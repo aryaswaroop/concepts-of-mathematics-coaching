@@ -6,6 +6,13 @@ import {
 import MathPattern from "../common/MathPattern";
 
 const LocationSection = () => {
+    const locationQuery =
+        "Concepts of Mathematics, Near Shiv Mandir, Babugaon, Hazaribagh, Jharkhand 825301";
+
+    const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        locationQuery
+    )}`;
+
     return (
         <section
             id="location"
@@ -50,9 +57,11 @@ const LocationSection = () => {
                                 Hazaribagh, Jharkhand 825301
                             </p>
 
-                            <button
-                                type="button"
-                                className="group mt-6 inline-flex items-center gap-2 text-sm font-bold text-blue-600"
+                            <a
+                                href={mapUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group mt-6 inline-flex items-center gap-2 text-sm font-bold text-blue-600 transition-colors duration-200 hover:text-blue-700"
                             >
                                 Open location
 
@@ -60,7 +69,7 @@ const LocationSection = () => {
                                     size={16}
                                     className="transition-transform duration-300 group-hover:translate-x-1"
                                 />
-                            </button>
+                            </a>
                         </motion.div>
                     </div>
 

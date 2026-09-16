@@ -37,7 +37,7 @@ const pageMeta = {
     "/admin/results": {
         eyebrow: "Assessment",
         title: "Results",
-        subtitle: "Performance records",
+        subtitle: "Performance records",    
     },
     "/admin/rewards": {
         eyebrow: "Recognition",
@@ -58,18 +58,22 @@ const pageMeta = {
         subtitle: "Student guidance",
     },
     "/admin/enquiries": {
+        eyebrow: "Communication",
         title: "Enquiries",
         subtitle: "Admission enquiries",
     },
     "/admin/reports": {
+        eyebrow: "Insights",
         title: "Reports",
         subtitle: "Management insights",
     },
     "/admin/profile": {
+        eyebrow: "Account",
         title: "My Profile",
         subtitle: "Administrator profile",
     },
     "/admin/settings": {
+        eyebrow: "Account",
         title: "Settings",
         subtitle: "Account preferences",
     },

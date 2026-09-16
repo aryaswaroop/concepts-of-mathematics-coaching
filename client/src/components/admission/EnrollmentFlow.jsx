@@ -12,22 +12,22 @@ const EnrollmentFlow = () => {
         {
             icon: UserRound,
             title: "Student",
-            text: "Student admission information",
+            text: "Student admission details are recorded for enrollment.",
         },
         {
             icon: BookOpen,
             title: "Course",
-            text: "Class 11 or Class 12 Mathematics",
+            text: "Choose Class 11 or Class 12 Mathematics.",
         },
         {
             icon: BookOpen,
             title: "Batch",
-            text: "Selected available batch",
+            text: "Admission is associated with the selected available batch.",
         },
         {
             icon: CreditCard,
             title: "Payment",
-            text: "Payment records and balance",
+            text: "Installment payments and remaining balance can be tracked.",
         },
     ];
 
@@ -39,7 +39,7 @@ const EnrollmentFlow = () => {
                 <div className="rounded-[2rem] border border-slate-200/80 bg-slate-50/80 p-6 sm:p-8 lg:p-10">
                     <div className="max-w-2xl">
                         <p className="text-sm font-bold uppercase tracking-[0.16em] text-blue-600">
-                            System Structure
+                            Enrollment Flow
                         </p>
 
                         <h2 className="mt-2 text-3xl font-extrabold tracking-[-0.045em] text-slate-950 sm:text-4xl">
@@ -47,9 +47,9 @@ const EnrollmentFlow = () => {
                         </h2>
 
                         <p className="mt-4 text-base leading-7 text-slate-600">
-                            The admission experience connects the student,
-                            course, batch and payment information into one
-                            manageable enrollment flow.
+                            Once admission is confirmed, the student's course,
+                            batch and payment information can be managed
+                            together through the enrollment system.
                         </p>
                     </div>
 

@@ -68,10 +68,37 @@ export const createStudent = async ({
         });
 
         return await Student.findById(student._id)
-            .populate("userId", "name email phone role isActive")
+            .populate(
+                "userId",
+                "name email phone role isActive"
+            )
             .lean();
     } catch (error) {
         await User.findByIdAndDelete(user._id);
         throw error;
     }
+};
+
+export const getStudentByUserId = async (userId) => {
+    const student = await Student.findOne({
+        userId,
+    })
+        .select(
+            "userId admissionNumber name fatherName phone email class session school address admissionDate photo status"
+        )
+        .populate(
+            "userId",
+            "name email phone role isActive"
+        )
+        .lean();
+
+    if (!student) {
+        const error = new Error(
+            "Student profile not found"
+        );
+        error.statusCode = 404;
+        throw error;
+    }
+
+    return student;
 };
